@@ -154,7 +154,24 @@ public class ContentIndexDatabase implements AutoCloseable {
         }
     }
 
-    record ContentStorageKeys(String contentType, String backend) { }
+    class ContentStorageKeys {
+
+        private final String contentType;
+        private final String backend;
+
+        ContentStorageKeys(String contentType, String backend) {
+            this.contentType = contentType;
+            this.backend = backend;
+        }
+
+        public final String contentType() {
+            return this.contentType;
+        }
+
+        public final String backend() {
+            return this.backend;
+        }
+    }
 
     private Map<ContentStorageKeys, Long> queryStringToIntMap(String returnExpr) {
         try {

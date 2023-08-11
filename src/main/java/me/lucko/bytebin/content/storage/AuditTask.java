@@ -25,13 +25,13 @@
 
 package me.lucko.bytebin.content.storage;
 
-import me.lucko.bytebin.content.Content;
 import me.lucko.bytebin.content.ContentIndexDatabase;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuditTask implements Runnable {
 
@@ -61,12 +61,12 @@ public class AuditTask implements Runnable {
             String backendId = backend.getBackendId();
 
             LOGGER.info("[AUDIT] Listing content for backend {}", backendId);
-            List<String> keys = backend.listKeys().toList();
+            List<String> keys = backend.listKeys().collect(Collectors.toList());
             LOGGER.info("[AUDIT] Found {} entries for backend {}", keys.size(), backendId);
 
             List<String> keysToDelete = keys.stream()
                     .filter(key -> this.index.get(key) == null)
-                    .toList();
+                    .collect(Collectors.toList());
 
             LOGGER.info("[AUDIT] Found {} records that exist in the {} backend but not the index!", keysToDelete.size(), backendId);
             LOGGER.info("[AUDIT] " + String.join(",", keysToDelete));
